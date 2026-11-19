@@ -1,3 +1,4 @@
+﻿import API_BASE_URL from '../../config';
 import axios from 'axios';
 import React, { createContext, useEffect, useState } from 'react';
 
@@ -6,10 +7,10 @@ export const productContext = createContext();
 const Context = ({ children }) => {
   const [favProList, setFavProductList] = useState([]);
   const [cartProduct, setCartProducts] = useState([]);
-  const [token,setToken] = useState('')
+  const [token, setToken] = useState('');
 
   const getTokenFromLocalStorage = () => {
-    setToken(localStorage.getItem('token'))
+    setToken(localStorage.getItem('token'));
     return localStorage.getItem('token');
   };
 
@@ -21,7 +22,7 @@ const Context = ({ children }) => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get('http://localhost:5000/api/addfav', { headers });
+        const response = await axios.get(`${API_BASE_URL}/api/addfav`, { headers });
         setFavProductList(response.data);
       }
     } catch (error) {
@@ -37,7 +38,7 @@ const Context = ({ children }) => {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get('http://localhost:5000/api/addcart', { headers });
+        const response = await axios.get(`${API_BASE_URL}/api/addcart`, { headers });
         setCartProducts(response.data);
       }
     } catch (error) {
@@ -45,15 +46,13 @@ const Context = ({ children }) => {
     }
   };
 
-
-    useEffect(() => {
-      getTokenFromLocalStorage()
-      if(token){
-        getFav()
+  useEffect(() => {
+    getTokenFromLocalStorage();
+    if (token) {
+      getFav();
       getcart();
-      }
-    }, [token]);
-
+    }
+  }, [token]);
 
   return (
     <productContext.Provider
@@ -64,7 +63,7 @@ const Context = ({ children }) => {
         setCartProducts,
         token,
         setToken,
-        getcart
+        getcart,
       }}
     >
       {children}
